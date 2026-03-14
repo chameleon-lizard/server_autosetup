@@ -6,7 +6,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CONFIGS_DIR="$SCRIPT_DIR/configs"
 
-# ── Config mapping: remote path on omega → local relative path ──
+# ── Load server list ──
+source "$SCRIPT_DIR/server-list.env"
+
+# ── Config mapping: remote path on source host → local relative path ──
 OMEGA_FILES=(
   "/home/chameleon/.vimrc"
   "/home/chameleon/.bashrc"
@@ -15,14 +18,14 @@ OMEGA_FILES=(
   "/home/chameleon/terminal_tools_changelog.md"
 )
 
-# ── Step 1: Download configs from omega into repo ──
-echo "=== Downloading configs from omega into repo ==="
+# ── Step 1: Download configs from source host into repo ──
+echo "=== Downloading configs from $SOURCE_HOST ==="
 for f in "${OMEGA_FILES[@]}"; do
   rel="${f#/home/chameleon/}"        # e.g. .vimrc, .bashrc.d/custom.sh
   dest="$CONFIGS_DIR/$rel"
   mkdir -p "$(dirname "$dest")"
   echo -n "  $rel ... "
-  if scp -q "omega:$f" "$dest"; then
+  if scp -q "$SOURCE_HOST:$f" "$dest"; then
     echo "ok"
   else
     echo "FAILED"
@@ -46,10 +49,6 @@ for f in "${OMEGA_FILES[@]}"; do
 done
 
 # ── Step 3: Distribute to remote servers ──
-HOSTS=(
-  "castor"
-  "pollux"
-)
 
 DIST_FILES=(".vimrc" ".tmux.conf")
 
@@ -63,7 +62,7 @@ fi'
 
 echo ""
 echo "=== Distributing configs to servers ==="
-for host in "${HOSTS[@]}"; do
+for host in "${DIST_HOSTS[@]}"; do
   echo -n "$host ... "
 
   # .vimrc and .tmux.conf
