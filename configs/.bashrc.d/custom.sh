@@ -8,6 +8,8 @@ bind 'TAB:menu-complete'
 bind '"\e[Z":menu-complete-backward'
 bind 'set completion-ignore-case on'
 bind 'set colored-stats on'
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
 
 # ── Prompt ────────────────────────────────────────────────────
 _collapsed_pwd() {
