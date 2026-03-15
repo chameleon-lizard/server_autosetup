@@ -8,6 +8,7 @@
 - **Collapsed path in prompt** — `_collapsed_pwd` via Perl: intermediate directories are shortened to their first letter (`~/p/my/project`)
 - **Ctrl+W by delimiters** — `_kill_back_to_delim` deletes backward to the nearest `/`, `_`, `.`, `,`, or space instead of only whitespace (stock `werase` is disabled)
 - **Colored prompt** — username and path highlighted in green
+- **History search with arrows** — Up/Down search history by the prefix already typed on the command line
 
 ---
 
@@ -71,12 +72,17 @@
 - **1-based indexing** — windows and panes start at 1; windows are renumbered automatically on close
 - **True color** — `terminal-overrides` for proper 24-bit color support in xterm
 - **Splits inherit cwd** — `"` and `%` open a new pane in the current pane's directory; `c` opens a new window in the session directory
-- **Auto-session naming** — on creation, the session is automatically renamed to the basename of its starting directory
+- **Auto-session naming** — on creation, the session is automatically renamed to the basename of its starting directory (only when no explicit `-s` name was given)
 - **Theme** — monochrome gray palette with a muted brown accent (`#af875f`) on the active window index; dark statusbar (`#1c1c1c`), neutral pane borders; session name truncated at 25 chars
 
 ---
 
 ## Changelog
+
+### 2026-03-15
+- **bashrc**: arrow Up/Down now do `history-search-backward`/`history-search-forward` — searches history by typed prefix instead of just cycling
+- **vimrc**: added `set autoindent` — new lines preserve indentation from the previous line
+- **tmux.conf**: auto-session rename now only triggers when the session name is a default number (`0`, `1`, ...); explicit `-s name` is no longer overwritten
 
 ### 2026-03-14
 - **bashrc**: extracted all custom additions (completion bindings, prompt, Ctrl+W handler) into `~/.bashrc.d/custom.sh`; `.bashrc` now sources all `*.sh` files from `~/.bashrc.d/` via a loop — drop the file on any server, add the loader snippet, done
