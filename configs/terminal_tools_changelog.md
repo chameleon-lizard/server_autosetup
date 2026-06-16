@@ -79,6 +79,16 @@
 
 ## Changelog
 
+### 2026-06-15
+- **open-webui**: Installed via Docker (`ghcr.io/open-webui/open-webui:main`), container `open-webui`, host port **3000**, volume `open-webui:/app/backend/data`, `CORS_ALLOW_ORIGIN=https://chat.chameleon-lizard.ru`
+- **dns**: Added A-record `chat.chameleon-lizard.ru` → `82.202.136.87` on reg.ru
+- **nginx**: New server block for `chat.chameleon-lizard.ru` proxying to `127.0.0.1:3000` (HTTPS via Let's Encrypt, WebSocket, SSE streaming with buffering off, 100MB upload limit). Old `/chat` location removed; `chameleon-lizard.ru/chat` now 301-redirects to `https://chat.chameleon-lizard.ru/`
+
+### 2026-06-01
+- **java**: Installed `openjdk-25-jre-headless` and switched default Java from 21 to 25 via `update-java-alternatives` — required for Minecraft server 26.1 (`java_version: 25`)
+- **minecraft**: Upgraded server from 1.21.4 to 26.1; old jar kept as `server_1.21.4.jar`; world upgraded successfully, libraries unpacked
+- **systemd**: Created `/etc/systemd/system/minecraft.service` — auto-starts server as `chameleon`, restarts on failure after 10s, logs to journalctl
+
 ### 2026-03-15
 - **bashrc**: arrow Up/Down now do `history-search-backward`/`history-search-forward` — searches history by typed prefix instead of just cycling
 - **vimrc**: added `set autoindent` — new lines preserve indentation from the previous line
